@@ -17,17 +17,33 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 
-app.get('/', 
+app.get('/',
 (req, res) => {
   res.render('index');
 });
 
-app.get('/create', 
+app.post('/signup', (req, res, next) => {
+  models.Users.get({username: req.body.username}).then( (userExists) => {
+    // console.log('User Exists: ', userExists);
+    if(userExists){
+      res.redirect('/signup');
+    }else{
+      console.log('About to create User');
+      models.Users.create(req.body).then(function(resolvedStuff) {
+        res.statusCode = 301;
+        res.redirect('/');
+      });
+    }
+  })
+
+})
+
+app.get('/create',
 (req, res) => {
   res.render('index');
 });
 
-app.get('/links', 
+app.get('/links',
 (req, res, next) => {
   models.Links.getAll()
     .then(links => {
@@ -38,7 +54,7 @@ app.get('/links',
     });
 });
 
-app.post('/links', 
+app.post('/links',
 (req, res, next) => {
   var url = req.body.url;
   if (!models.Links.isValidUrl(url)) {

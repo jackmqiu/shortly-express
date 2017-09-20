@@ -23,6 +23,11 @@ class Users extends Model {
     return utils.compareHash(attempted, password, salt);
   }
 
+  checkUser(username) {
+    var options = {username: username};
+    return super.get(options);
+  }
+
   /**
    * Creates a new user record with the given username and password.
    * This method creates a salt and hashes the password before storing
@@ -35,7 +40,6 @@ class Users extends Model {
    */
   create({ username, password }) {
     let salt = utils.createRandom32String();
-
     let newUser = {
       username,
       salt,

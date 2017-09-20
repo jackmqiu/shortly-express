@@ -123,7 +123,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Account Creation:', function() {
+  describe('Account Creation:', function() {
 
     it('signup creates a new user record', function(done) {
       var options = {
@@ -138,6 +138,7 @@ describe('', function() {
       request(options, function(error, res, body) {
         var queryString = 'SELECT * FROM users where username = "Samantha"';
         db.query(queryString, function(err, rows) {
+          console.log('query completed');
           if (err) { done(err); }
           var user = rows[0];
           expect(user).to.exist;
@@ -208,7 +209,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Account Login:', function() {
+  describe('Account Login:', function() {
 
     beforeEach(function(done) {
       var options = {
