@@ -138,6 +138,7 @@ describe('', function() {
       request(options, function(error, res, body) {
         var queryString = 'SELECT * FROM users where username = "Samantha"';
         db.query(queryString, function(err, rows) {
+          console.log('ROWS! ', rows);
           if (err) { done(err); }
           var user = rows[0];
           expect(user).to.exist;
@@ -480,7 +481,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Sessions and cookies', function() {
+  describe('Sessions and cookies', function() {
     var requestWithSession;
     var cookieJar;
 
