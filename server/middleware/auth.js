@@ -2,29 +2,37 @@ const models = require('../models');
 const Promise = require('bluebird');
 const Sessions = models.Sessions; // QUESTION: How does this work? Why does
 module.exports.createSession = (req, res, next) => {
-  if (req.cookies.shortlyid) {
+  if (req.cookies.shortlyid && !req.session) {//there are cookies and no session
     console.log('cookies: ', req.cookies);
     res.cookies = req.cookies;
     req.session = {hash: req.cookies};
     next();
-  } else {
+  } else if (req.cookies.shortlyid && req.session){//if there are cookies and there is a user
     Sessions.create().then(function(sessionObj){
       return Sessions.get({id: sessionObj.insertId});
     })
-    .then(function(session) {
+    .then(function(session) {//sets session hash and session userid
       console.log('session after promise: ', session);
       req.session = {hash: session.hash, userId: session.user};
       if(session.userId){
         return models.Users.get({id: session.userId});
       }
     })
-    .then(function(user){
+    .then(function(user){//sets sesstion username
       console.log('user after promise: ', user);
       if(user){
         req.session.user = {username: user.username};
       }
       res.cookies = {'shortlyid': { value: 'cookiehash'}};
       next();
+    });
+  } else {//no cookies
+    Sessions.create().then(function(sessionObj){
+      return Sessions.get({id: sessionObj.insertId});
+    })
+    .then(function(session) {//sets session hash and session userid
+      console.log('session after promise: ', session);
+      req.session = {hash: session.hash};
     });
   }
 };
