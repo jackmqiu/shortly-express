@@ -372,7 +372,7 @@ describe('', function() {
     });
 
     describe('Session Parser', function() {
-      it('initializes a new session when there are no cookies on the request', function(done) {
+      it('15 initializes a new session when there are no cookies on the request', function(done) {
         var requestWithoutCookies = httpMocks.createRequest();
         var response = httpMocks.createResponse();
 
@@ -385,7 +385,7 @@ describe('', function() {
         });
       });
 
-      it('sets a new cookie on the response when a session is initialized', function(done) {
+      it('16 sets a new cookie on the response when a session is initialized', function(done) {
         var requestWithoutCookie = httpMocks.createRequest();
         var response = httpMocks.createResponse();
 
@@ -397,7 +397,7 @@ describe('', function() {
         });
       });
 
-      it('assigns a session object to the request if a session already exists', function(done) {
+      it('17 assigns a session object to the request if a session already exists', function(done) {
 
         var requestWithoutCookie = httpMocks.createRequest();
         var response = httpMocks.createResponse();
@@ -418,7 +418,7 @@ describe('', function() {
         });
       });
 
-      it('creates a new hash for each new session', function(done) {
+      it('18 creates a new hash for each new session if there are no cookies', function(done) {
         var requestWithoutCookies = httpMocks.createRequest();
         var response = httpMocks.createResponse();
 
@@ -435,7 +435,7 @@ describe('', function() {
         });
       });
 
-      it('assigns a username and userId property to the session object if the session is assigned to a user', function(done) {
+      it('19 assigns a username and userId property to the session object if the session is assigned to a user', function(done) {
         var requestWithoutCookie = httpMocks.createRequest();
         var response = httpMocks.createResponse();
         var username = 'BillZito';
