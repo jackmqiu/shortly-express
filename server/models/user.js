@@ -23,10 +23,7 @@ class Users extends Model {
     return utils.compareHash(attempted, password, salt);
   }
 
-  checkUser(username) {
-    var options = {username: username};
-    return super.get(options);
-  }
+  
 
   /**
    * Creates a new user record with the given username and password.

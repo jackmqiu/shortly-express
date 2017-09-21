@@ -34,10 +34,25 @@ app.post('/signup', (req, res, next) => {
         res.redirect('/');
       });
     }
-  })
+  });
 
-})
+});
+app.post('/login', (req, res, next) => {
+  models.Users.get({username: req.body.username}).then( (user) => {
+    console.log('User: ', user);
+    if(user){
+      if (user.password === utils.createHash(req.body.password, user.salt)){
+        res.redirect('/');
+      }else{
+        res.redirect('/login');
+      }
+    }else{
+      console.log('Unknown Username');
+      res.redirect('/login');
+    }
+  });
 
+});
 app.get('/create',
 (req, res) => {
   res.render('index');
