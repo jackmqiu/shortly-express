@@ -138,7 +138,6 @@ describe('', function() {
       request(options, function(error, res, body) {
         var queryString = 'SELECT * FROM users where username = "Samantha"';
         db.query(queryString, function(err, rows) {
-          console.log('query completed');
           if (err) { done(err); }
           var user = rows[0];
           expect(user).to.exist;
