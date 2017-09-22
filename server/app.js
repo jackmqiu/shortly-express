@@ -20,24 +20,33 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/',
 (req, res) => {
-  console.log(res.cookies);
   res.render('index');
 });
 
 app.post('/signup', (req, res, next) => {
-  console.log('Username: ', req.body.username);
+  console.log('Req.body (in post: /signup) ', req.body);
   models.Users.get({username: req.body.username}).then( (userExists) => {
     if(userExists){
       res.redirect('/signup');
     }else{
-      models.Users.create(req.body).then(function(resolvedStuff) {
+      models.Users.create(req.body).then(function(userPacket) {
         res.statusCode = 301;
+        console.log(userPacket);
+        models.Sessions.update({hash: req.session.hash}, {userId: userPacket.insertId});
         res.redirect('/');
       });
     }
   });
 
 });
+
+app.get('/logout', (req, res, next) => {
+  models.Sessions.delete({hash: req.session.hash}).then(function(){
+    res.clearCookie('shortlyid');
+    res.redirect('/');
+  });
+});
+
 app.post('/login', (req, res, next) => {
   models.Users.get({username: req.body.username}).then( (user) => {
     if(user){

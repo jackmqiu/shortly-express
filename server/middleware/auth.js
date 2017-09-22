@@ -8,7 +8,7 @@ module.exports.createSession = (req, res, next) => {
   } else if (req.cookies.shortlyid){//cookies
     Sessions.get({hash: req.cookies.shortlyid})
     .then(function(sessionObj){
-      console.log('resolved', JSON.stringify(sessionObj));
+      // console.log('resolved', JSON.stringify(sessionObj));
       if(sessionObj){//this session is in database
         req.session = {hash: sessionObj.hash};
         if(sessionObj.userId){
@@ -20,14 +20,14 @@ module.exports.createSession = (req, res, next) => {
             next();
           });
         }else{//there's a session but not attached to user
-          console.log('theres a session obj: ', sessionObj);
+          // console.log('theres a session obj: ', sessionObj);
           res.cookie('shortlyid', sessionObj.hash);
           // res.cookies = {shortlyid: {value: sessionObj.hash}};//set res.cookie to current session
           next();
         }
       }else{//new Session, cookie was invalid
         res.cookies = {};//clear cookie
-        console.log('theres no session with that cookie', sessionObj);
+        // console.log('theres no session with that cookie', sessionObj);
         newSession(req, res, next);//create session
       }
     }).catch(function(catchObj){
