@@ -15,10 +15,14 @@ module.exports.createSession = (req, res, next) => {
           models.Users.get({id: sessionObj.userId}).then(function(userObj){
             req.session.user = {username: userObj.username};
             req.session.userId = userObj.id;
+            res.cookie('shortlyid', sessionObj.hash);
+            // res.cookies = {shortlyid: {value: sessionObj.hash}};
             next();
           });
-        }else{
+        }else{//there's a session but not attached to user
           console.log('theres a session obj: ', sessionObj);
+          res.cookie('shortlyid', sessionObj.hash);
+          // res.cookies = {shortlyid: {value: sessionObj.hash}};//set res.cookie to current session
           next();
         }
       }else{//new Session, cookie was invalid
@@ -80,7 +84,8 @@ function newSession(req, res, next) {
   })// create session. set req cookie, req session, res cookie (obj from cookie parser).
   .then(function(hashObj){
     req.session = {hash: hashObj.hash, userId: hashObj.userId};
-    res.cookies = {shortlyid: { value: hashObj.hash }};
+    res.cookie('shortlyid', hashObj.hash);
+    //res.cookies = {shortlyid: { value: hashObj.hash }};
     next();
   });
 }
